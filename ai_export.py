@@ -94,12 +94,23 @@ def generate_folder_structure_md(folder_path, output_file, exclude_folders):
             ]
 
             for file in files:
-                if file.endswith(".py") and not file.startswith("."):
+                if (
+                    file.endswith(".py")
+                    or file.endswith(".cs")
+                    or file.endswith(".sql")
+                ):
                     file_path = os.path.join(root, file)
                     relative_path = os.path.relpath(file_path, folder_path)
 
                     md_file.write(f"### {relative_path}\n\n")
-                    md_file.write("```python\n")
+                    md_code_type = (
+                        "python"
+                        if file.endswith(".py")
+                        else "csharp"
+                        if file.endswith(".cs")
+                        else "sql"
+                    )
+                    md_file.write(f"```{md_code_type}\n")
 
                     try:
                         with open(file_path, "r", encoding="utf-8") as py_file:
